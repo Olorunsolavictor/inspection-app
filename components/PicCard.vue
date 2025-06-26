@@ -9,20 +9,22 @@ const imageSrc = computed(() => `/images/step-${stepStore.selectedStep}.png`);
 // Map step numbers to titles (omit step 1)
 const stepTitles: Record<number, string> = {
   2: "Front View",
-  3: "Side View",
+  3: "Left View (driver's side)",
   4: "Back View",
-  5: "Interior",
-  6: "Dashboard",
-  7: "Tyres",
-  8: "Engine Bay",
+  5: "Right View",
+  6: "Chassis Number",
+  7: "Dashboard",
+  8: "Interior Back",
 };
 
 const imageTitle = computed(() => stepTitles[stepStore.selectedStep] || "");
 </script>
 
 <template>
-  <div class="w-full h-[220px] flex flex-col rounded overflow-hidden mx-auto">
-    <label v-if="imageTitle" class="text-gray-700 font-normal mb-2 text-center">
+  <div
+    class="w-full h-[260px] flex flex-col gap-3.5 rounded overflow-hidden mx-auto"
+  >
+    <label v-if="imageTitle" class="text-[#909090] font-normal mb- text-center">
       {{ imageTitle }}
     </label>
 
