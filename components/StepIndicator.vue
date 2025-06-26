@@ -8,7 +8,7 @@ const cameraStore = useCameraStore();
 
 <template>
   <div
-    class="absolute bottom-6 bg-[#2B2B2B80] left-1/2 p-2 rounded-[18px] z-50 transform -translate-x-1/2 flex gap-2"
+    class="absolute bottom-6 bg-[#2B2B2B80] right-5 p-2 rounded-[18px] z-50 transform flex gap-2"
   >
     <div
       v-for="(step, index) in cameraStore.steps"

@@ -11,7 +11,7 @@ const props = defineProps({
     v-bind="$attrs"
     :disabled="props.disabled"
     :class="`
-      px-4 py-3 rounded w-full font-medium transition duration-200
+       py-2 rounded w-full font-medium transition duration-200
       ${
         props.variant === 'filled'
           ? 'bg-green-primary text-white'

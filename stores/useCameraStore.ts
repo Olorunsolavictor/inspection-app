@@ -5,13 +5,13 @@ import { ref, computed } from "vue";
 type OverlayMode = "menu" | "capture" | "verify" | null;
 
 type Step =
-  | "Front View"
-  | "Rear View"
+  | "Front"
+  | "Back"
   | "Left Side"
   | "Right Side"
-  | "Interior"
+  | "Chassis Number"
   | "Dashboard"
-  | "Odometer";
+  | "Interior Back";
 
 export const useCameraStore = defineStore("camera", () => {
   const overlayMode = ref<OverlayMode>(null);
@@ -19,13 +19,13 @@ export const useCameraStore = defineStore("camera", () => {
   const capturedImage = ref<string | null>(null);
 
   const steps = ref<Step[]>([
-    "Front View",
-    "Rear View",
+    "Front",
     "Left Side",
     "Right Side",
-    "Interior",
+    "Back",
+    "Chassis Number",
     "Dashboard",
-    "Odometer",
+    "Interior Back",
   ]);
 
   const currentStepIndex = ref(0);
