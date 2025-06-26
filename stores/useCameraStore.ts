@@ -9,7 +9,7 @@ type Step =
   | "Back"
   | "Left Side"
   | "Right Side"
-  | "Chassis Number"
+  | "Chassis No."
   | "Dashboard"
   | "Interior Back";
 
@@ -23,7 +23,7 @@ export const useCameraStore = defineStore("camera", () => {
     "Left Side",
     "Right Side",
     "Back",
-    "Chassis Number",
+    "Chassis No.",
     "Dashboard",
     "Interior Back",
   ]);
