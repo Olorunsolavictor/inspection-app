@@ -1,11 +1,42 @@
+// stores/useCameraStore.ts
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+
 type OverlayMode = "menu" | "capture" | "verify" | null;
+
+type Step =
+  | "Front View"
+  | "Rear View"
+  | "Left Side"
+  | "Right Side"
+  | "Interior"
+  | "Dashboard"
+  | "Odometer";
 
 export const useCameraStore = defineStore("camera", () => {
   const overlayMode = ref<OverlayMode>(null);
   const showRotateNotice = ref(true);
   const capturedImage = ref<string | null>(null);
+
+  const steps = ref<Step[]>([
+    "Front View",
+    "Rear View",
+    "Left Side",
+    "Right Side",
+    "Interior",
+    "Dashboard",
+    "Odometer",
+  ]);
+
+  const currentStepIndex = ref(0);
+
+  const completedSteps = ref<Record<Step, string>>({} as Record<Step, string>);
+
+  const currentStep = computed(() => steps.value[currentStepIndex.value]);
+
+  const isInspectionComplete = computed(() => {
+    return Object.keys(completedSteps.value).length === steps.value.length;
+  });
 
   function setOverlayMode(mode: OverlayMode) {
     overlayMode.value = mode;
@@ -15,18 +46,45 @@ export const useCameraStore = defineStore("camera", () => {
     capturedImage.value = image;
   }
 
+  function verifyImage() {
+    if (capturedImage.value) {
+      completedSteps.value[currentStep.value] = capturedImage.value;
+      capturedImage.value = null;
+
+      if (currentStepIndex.value < steps.value.length - 1) {
+        currentStepIndex.value += 1;
+        overlayMode.value = "menu";
+      } else {
+        overlayMode.value = null;
+      }
+
+      localStorage.setItem(
+        "inspectionData",
+        JSON.stringify(completedSteps.value)
+      );
+    }
+  }
+
   function resetCameraUI() {
     overlayMode.value = "menu";
     showRotateNotice.value = true;
     capturedImage.value = null;
+    currentStepIndex.value = 0;
+    completedSteps.value = {} as Record<Step, string>;
   }
 
   return {
     overlayMode,
     showRotateNotice,
     capturedImage,
+    steps,
+    currentStep,
+    currentStepIndex,
+    completedSteps,
+    isInspectionComplete,
     setOverlayMode,
     setCapturedImage,
+    verifyImage,
     resetCameraUI,
   };
 });

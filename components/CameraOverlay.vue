@@ -20,8 +20,7 @@ function handleGoBack() {
 function handleVerify() {
   if (cameraStore.capturedImage) {
     localStorage.setItem("verifiedImage", cameraStore.capturedImage);
-    // Optionally transition to another state
-    // cameraStore.setOverlayMode("done");
+    cameraStore.verifyImage();
   }
 }
 

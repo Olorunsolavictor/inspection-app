@@ -64,6 +64,7 @@ onBeforeUnmount(() => {
     </div>
 
     <CameraOverlay :on-capture="capturePhoto" />
+    <StepIndicator />
 
     <div class="w-full h-full bg-black rounded overflow-hidden">
       <video
