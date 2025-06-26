@@ -55,7 +55,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative w-full h-screen flex flex-col bg-black text-white">
+  <div class="relative w-full h-[100dvh] flex flex-col bg-black text-white">
     <div
       v-if="cameraStore.showRotateNotice"
       class="absolute inset-0 h-full bg-black/70 z-30 flex items-center justify-center"
