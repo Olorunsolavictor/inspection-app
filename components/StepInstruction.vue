@@ -37,9 +37,9 @@ const dynamicPart = computed(() => viewMap[step.value] || "selected part");
         </p>
 
         <div class="space-y-2 text-sm">
-          <div class="flex items-start gap-2">
+          <div class="flex items-center gap-2">
             <div
-              class="w-2 h-2 mt-1 border border-purple-600 rounded-full shrink-0"
+              class="w-2 h-2 mt-1 border border-purple-primary rounded-full shrink-0"
             ></div>
             <p>
               You can locate the chassis number on the
@@ -49,7 +49,7 @@ const dynamicPart = computed(() => viewMap[step.value] || "selected part");
 
           <div class="flex items-start gap-2">
             <div
-              class="w-2 h-2 mt-1 border border-purple-600 rounded-full shrink-0"
+              class="w-2 h-2 mt-1 border border-purple-primary rounded-full shrink-0"
             ></div>
             <p>
               Or find it on the
