@@ -194,10 +194,10 @@ const capturedImageStyle = computed<CSSProperties>(() => {
       <p class="text-lg animate-pulse">Rotate Device</p>
     </div>
 
-    <CameraOverlay :on-capture="capturePhoto" />
     <StepIndicator :style="indicatorStyle" />
 
     <div class="w-full h-full bg-black rounded overflow-hidden">
+      <CameraOverlay :on-capture="capturePhoto" />
       <video
         ref="videoRef"
         class="w-full h-full object-cover"

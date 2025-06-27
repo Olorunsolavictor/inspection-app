@@ -48,10 +48,11 @@ const cameraStore = useCameraStore();
       move to the next Vehicle view
     </h3>
 
-    <div class="flex w-[85%] mt-5 gap-2 items-center justify-center">
+    <div class="flex w-[90%] mt-5 gap-2 items-center justify-center">
       <Button
         variant="outline"
         size="sm"
+        full-width
         :disabled="cameraStore.isVerifying"
         @click="props.onRecapture"
         >Re-capture</Button
