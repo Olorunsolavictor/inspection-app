@@ -102,7 +102,7 @@ const indicatorStyle = computed<CSSProperties>(() => {
         return {
           position: "absolute",
           bottom: "10%",
-          left: "0px",
+          left: "2%",
           flexDirection: "column",
         };
       case "landscape-secondary":
@@ -192,7 +192,6 @@ const capturedImageStyle = computed<CSSProperties>(() => {
 
 <template>
   <div class="relative w-screen h-screen bg-black text-white overflow-hidden">
-    <!-- Rotate Notice -->
     <div
       v-if="cameraStore.showRotateNotice"
       class="absolute inset-0 bg-black/70 z-30 flex items-center justify-center"
@@ -200,7 +199,6 @@ const capturedImageStyle = computed<CSSProperties>(() => {
       <p class="text-lg animate-pulse">Rotate Device</p>
     </div>
 
-    <!-- Camera Preview Fullscreen -->
     <div class="relative w-full h-full bg-black overflow-hidden">
       <video
         ref="videoRef"
@@ -210,7 +208,6 @@ const capturedImageStyle = computed<CSSProperties>(() => {
       />
       <CameraOverlay :on-capture="capturePhoto" />
 
-      <!-- Overlay container pinned to video -->
       <div class="absolute inset-0 z-10 pointer-events-none">
         <StepIndicator :style="indicatorStyle" />
 
@@ -230,7 +227,6 @@ const capturedImageStyle = computed<CSSProperties>(() => {
 
     <canvas ref="canvasRef" class="hidden" />
 
-    <!-- Error Message -->
     <div
       v-if="errorMessage || cameraStore.sizeError"
       class="absolute bottom-30 text-sm text-center flex justify-center items-center flex-col gap-2 w-full z-20"

@@ -51,7 +51,7 @@ const checkmarkTransform = computed(() => {
     case "landscape-primary":
       return "rotate(90deg)";
     case "landscape-secondary":
-      return "rotate(-90deg)";
+      return "rotate(90deg)";
     case "portrait-secondary":
       return "rotate(180deg)";
     default:
