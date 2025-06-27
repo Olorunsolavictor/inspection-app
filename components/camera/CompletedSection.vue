@@ -25,12 +25,10 @@ const cameraStore = useCameraStore();
         all vehicle views.
       </h3>
     </div>
-    <div class="flex w-[80%] mt-6 gap-2 items-center justify-center">
-      <Button variant="outline" size="sm" @click="props.onGoHome"
-        >Go Home</Button
-      >
+    <div class="flex w-[85%] mt-6 gap-2 items-center justify-center">
+      <Button variant="outline" size="sm" @click="props.onGoHome">Home</Button>
       <Button variant="filled" size="sm" @click="props.onGoGallery"
-        >Go to Gallery</Button
+        >Gallery</Button
       >
     </div>
   </section>

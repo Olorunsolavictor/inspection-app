@@ -23,14 +23,15 @@ const imageTitle = computed(() => stepTitles[stepStore.selectedStep] || "");
   <div
     class="w-full h-[260px] flex flex-col gap-3.5 rounded overflow-hidden mx-auto"
   >
-    <label v-if="imageTitle" class="text-[#909090] font-normal mb- text-center">
+    <label v-if="imageTitle" class="text-[#909090] font-normal text-center">
       {{ imageTitle }}
     </label>
 
     <img
       :src="imageSrc"
-      :alt="`Vehicle step ${stepStore.selectedStep}`"
+      :alt="imageTitle || `Vehicle step ${stepStore.selectedStep}`"
       class="w-full h-auto rounded shadow transition-all duration-300"
+      loading="lazy"
     />
   </div>
 </template>

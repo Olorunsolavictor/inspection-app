@@ -5,21 +5,23 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const goHome = () => {
-  router.push("/");
-};
+const goHome = () => router.push("/");
 </script>
 
 <template>
-  <div class="md:hidden">
+  <div>
     <Camera />
   </div>
-  <div
-    class="md:flex h-[50dvh] gap-6 flex-col justify-center items-center hidden"
+
+  <!-- <div
+    class="hidden md:flex h-[50dvh] flex-col items-center justify-center gap-6 text-center px-4"
   >
-    <h1>Hi, Please View Camera on Mobile Device</h1>
+    <h1 class="text-lg font-semibold text-gray-700">
+      Hi, please view the camera on a mobile device with a supported back
+      camera.
+    </h1>
     <div class="w-[140px]">
       <Button variant="filled" size="sm" @click="goHome">Go Home</Button>
     </div>
-  </div>
+  </div> -->
 </template>

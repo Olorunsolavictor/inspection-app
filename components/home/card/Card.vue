@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useStepStore } from "~/stores/useStepStore";
 import Step from "~/components/home/card/Step.vue";
 import StepInstruction from "~/components/home/card/StepInstruction.vue";
@@ -10,14 +10,14 @@ const steps = stepStore.steps;
 
 <template>
   <div
-    class="w-full min-h-[570px] h-fit px-3 py-8 flex flex-col justify-between items-center gap-8 rounded-xl text-sm bg-purple-secondary"
+    class="w-full h-fit px-3 pt-8 flex flex-col justify-between items-center gap-8 rounded-xl text-sm bg-purple-secondary"
   >
     <section
-      class="w-full flex flex-wrap justify-center gap-2 md:justify-between md:gap-2"
+      class="w-full flex flex-wrap justify-center md:justify-between gap-2"
+      aria-label="Inspection steps"
     >
       <Step v-for="step in steps" :key="step" :step="step" />
     </section>
-
     <StepInstruction />
 
     <PicCard />

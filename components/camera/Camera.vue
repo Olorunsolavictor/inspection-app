@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
+import {
+  onMounted,
+  onUnmounted,
+  watch,
+  ref,
+  computed,
+  type CSSProperties,
+} from "vue";
 import { useRouter } from "vue-router";
 import { useCamera } from "~/composables/useCamera";
 import { useCameraStore } from "~/stores/useCameraStore";
@@ -9,19 +16,16 @@ import Button from "~/components/util/Button.vue";
 
 const router = useRouter();
 const cameraStore = useCameraStore();
-
-type OrientationLabel =
+const orientationLabel = ref<
   | "portrait-primary"
   | "portrait-secondary"
   | "landscape-primary"
-  | "landscape-secondary";
-
-const orientationLabel = ref<OrientationLabel>("portrait-primary");
+  | "landscape-secondary"
+>("portrait-primary");
 
 function updateOrientation() {
   const angle =
     window.screen.orientation?.angle ?? (window.orientation as number) ?? 0;
-
   switch (angle) {
     case 0:
       orientationLabel.value = "portrait-primary";
@@ -41,25 +45,99 @@ function updateOrientation() {
   }
 }
 
-onMounted(() => {
-  updateOrientation();
+onMounted(async () => {
   window.addEventListener("orientationchange", updateOrientation);
+  updateOrientation();
+
+  const success = await startCamera();
+  if (success) {
+    cameraStore.showRotateNotice = true;
+    setTimeout(() => {
+      cameraStore.showRotateNotice = false;
+      cameraStore.setOverlayMode("menu");
+    }, 2000);
+  } else {
+    cameraStore.showRotateNotice = false;
+    console.error("Camera not available or permission denied");
+  }
 });
 
 onUnmounted(() => {
   window.removeEventListener("orientationchange", updateOrientation);
 });
 
-import type { CSSProperties } from "vue";
+const {
+  videoRef,
+  canvasRef,
+  capturedImage,
+  errorMessage,
+  sizeError,
+  startCamera,
+  capturePhoto,
+} = useCamera();
+
+watch(capturedImage, (val) => {
+  if (val) {
+    cameraStore.capturedImage = val;
+    cameraStore.setOverlayMode("verify");
+  }
+});
+
+watch(sizeError, (val) => {
+  cameraStore.sizeError = val;
+});
+
+function handleGoBack() {
+  cameraStore.resetCameraUI();
+  router.push("/");
+}
 
 const indicatorStyle = computed<CSSProperties>(() => {
+  const isCaptureMode = cameraStore.overlayMode === "capture";
+
+  if (isCaptureMode) {
+    switch (orientationLabel.value) {
+      case "landscape-primary":
+        return {
+          position: "absolute",
+          bottom: "10%",
+          left: "0px",
+          width: "content-fit",
+          flexDirection: "column",
+        };
+      case "landscape-secondary":
+        return {
+          position: "absolute",
+          top: "10%",
+          right: "20px",
+          flexDirection: "column",
+        };
+      case "portrait-primary":
+        return {
+          position: "absolute",
+          top: "2%",
+          right: "20px",
+          flexDirection: "row",
+        };
+      default:
+        return {
+          position: "absolute",
+          right: "50%",
+          transform: "translateX(-50%)",
+          flexDirection: "row",
+          bottom: "24px",
+        };
+    }
+  }
+
   switch (orientationLabel.value) {
     case "landscape-primary":
       return {
         position: "absolute",
-        lefte: "20px",
-        bottom: "10px",
+        right: "2%",
+        bottom: "7%",
         flexDirection: "column",
+        rotate: "360deg",
       };
     case "landscape-secondary":
       return {
@@ -83,9 +161,10 @@ const capturedImageStyle = computed<CSSProperties>(() => {
     case "landscape-secondary":
       return {
         position: "absolute",
-        bottom: "30%",
+        bottom: "13%",
         right: "12%",
         transform: "rotate(0deg)",
+        width: "40%",
       };
     case "portrait-secondary":
       return {
@@ -97,61 +176,20 @@ const capturedImageStyle = computed<CSSProperties>(() => {
     default:
       return {
         position: "absolute",
-        bottom: "20%",
+        bottom: "13%",
         right: "20%",
-        transform: " rotate(270deg)",
+        transform: "rotate(270deg)",
         flexDirection: "column",
       };
   }
 });
-
-const {
-  videoRef,
-  canvasRef,
-  capturedImage,
-  errorMessage,
-  sizeError,
-  startCamera,
-  capturePhoto,
-} = useCamera();
-onMounted(async () => {
-  const success = await startCamera();
-
-  if (success) {
-    cameraStore.showRotateNotice = true;
-
-    setTimeout(() => {
-      cameraStore.showRotateNotice = false;
-      cameraStore.setOverlayMode("menu");
-    }, 2000);
-  } else {
-    cameraStore.showRotateNotice = false;
-    console.error("Failed to start camera");
-  }
-});
-
-watch(capturedImage, (val) => {
-  if (val) {
-    cameraStore.capturedImage = val;
-    cameraStore.overlayMode = "verify";
-  }
-});
-
-watch(sizeError, (val) => {
-  cameraStore.sizeError = val;
-});
-
-function handleGoBack() {
-  cameraStore.resetCameraUI();
-  router.push("/");
-}
 </script>
 
 <template>
   <div class="relative w-full h-[100dvh] flex flex-col bg-black text-white">
     <div
       v-if="cameraStore.showRotateNotice"
-      class="absolute inset-0 h-full bg-black/70 z-30 flex items-center justify-center"
+      class="absolute inset-0 bg-black/70 z-30 flex items-center justify-center"
     >
       <p class="text-lg animate-pulse">Rotate Device</p>
     </div>
@@ -173,12 +211,12 @@ function handleGoBack() {
     <div
       v-if="cameraStore.capturedImage"
       :style="capturedImageStyle"
-      class="bg-white p-2 rounded border border-black divide-dashed border-dashed shadow-lg"
+      class="bg-white w-[70%] p-2 rounded border border-black border-dashed shadow-lg"
     >
       <img
         :src="cameraStore.capturedImage"
         alt="Captured"
-        class="h-32 w-56 object-cover rounded"
+        class="w-full rounded"
       />
     </div>
 
@@ -186,17 +224,13 @@ function handleGoBack() {
       v-if="errorMessage || cameraStore.sizeError"
       class="absolute bottom-30 text-sm text-center flex justify-center items-center flex-col gap-2 w-full"
     >
-      <p class="text-red-500 max-w-[70%] text-center mb-2">
+      <p class="text-red-500 max-w-[70%]">
         {{
           errorMessage ||
           "Photo too large. Try a closer shot or better lighting."
         }}
       </p>
-      <div class="w-[120px] mx-auto">
-        <Button variant="filled" size="sm" @click="handleGoBack">
-          Go Home
-        </Button>
-      </div>
+      <Button variant="filled" size="sm" @click="handleGoBack">Go Home</Button>
     </div>
   </div>
 </template>

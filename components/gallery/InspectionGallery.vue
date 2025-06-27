@@ -39,8 +39,8 @@ onMounted(() => {
 <template>
   <div class="p-4 max-w-6xl bg-purple-secondary rounded-lg mx-auto relative">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-bold text-gray-primary">Inspection Gallery</h2>
-      <div v-if="images.length > 0" class="w-16">
+      <h2 class="text-2xl font-bold text-gray-primary">Gallery</h2>
+      <div v-if="images.length > 0" class="">
         <Button variant="filled" size="sm" @click="clearGallery">Clear</Button>
       </div>
     </div>

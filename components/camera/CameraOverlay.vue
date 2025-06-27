@@ -24,7 +24,6 @@ const stepImages: Record<string, string> = {
   "Interior Back": "/images/front.png",
 };
 
-// Orientation & rotation logic (unchanged)
 const rotationAngle = ref(0);
 
 function updateRotation() {
@@ -37,7 +36,6 @@ onMounted(() => {
   updateRotation();
   window.addEventListener("orientationchange", updateRotation);
 });
-
 onUnmounted(() => {
   window.removeEventListener("orientationchange", updateRotation);
 });
@@ -50,24 +48,20 @@ const rotationStyle = computed(() => ({
 function handleStart() {
   cameraStore.setOverlayMode("capture");
 }
-
 function handleGallery() {
   cameraStore.resetCameraUI();
   router.push("/gallery");
 }
-
 function handleGoHome() {
   router.push("/");
   cameraStore.resetCameraUI();
 }
-
 function handleVerify() {
   if (cameraStore.capturedImage) {
     localStorage.setItem("verifiedImage", cameraStore.capturedImage);
     cameraStore.verifyImage();
   }
 }
-
 function handleRecapture() {
   cameraStore.setCapturedImage("");
   cameraStore.setOverlayMode("capture");
@@ -83,14 +77,11 @@ type OrientationLabel =
   | "landscape-primary"
   | "landscape-secondary";
 
-const orientationAngle = ref(0);
 const orientationLabel = ref<OrientationLabel>("portrait-primary");
 
 function updateOrientation() {
   const orientation = window.screen.orientation || ({} as any);
   const angle = orientation.angle ?? (window.orientation as number) ?? 0;
-
-  orientationAngle.value = angle;
 
   switch (angle) {
     case 0:
@@ -110,13 +101,16 @@ function updateOrientation() {
       orientationLabel.value = "portrait-primary";
   }
 }
+
 const captureOverlayStyle = computed(() => {
+  const isCapture = cameraStore.overlayMode === "capture";
+
   switch (orientationLabel.value) {
     case "landscape-primary":
       return {
         top: "0",
         bottom: "0",
-        left: "0",
+        [isCapture ? "right" : "left"]: "0",
         height: "100vh",
         width: "100px",
       };
@@ -124,17 +118,22 @@ const captureOverlayStyle = computed(() => {
       return {
         top: "0",
         bottom: "0",
-        left: "0",
+        [isCapture ? "left" : "right"]: "0",
         height: "100vh",
         width: "100px",
       };
     case "portrait-primary":
+      return {
+        bottom: "0",
+        [isCapture ? "left" : "right"]: "0",
+        width: "100vw",
+      };
     case "portrait-secondary":
     default:
       return {
+        [isCapture ? "top" : "bottom"]: "0",
         left: "0",
         right: "0",
-        top: "0",
         width: "100vw",
         height: "auto",
       };
@@ -167,7 +166,7 @@ const containerStyle = computed(() => {
           left: "0",
           right: "0",
           top: "0",
-          height: "45dvh",
+          height: "50dvh",
           width: "100vw",
         };
     }
@@ -216,9 +215,9 @@ onUnmounted(() => {
       )
     "
     :class="[
-      'absolute w-screen z-20 text-white flex flex-col items-center justify-center shadow-md transition-all duration-300 px-6.5 backdrop-blur-md bg-gradient-to-b from-primaryGradientStart to-primaryGradientEnd',
+      'absolute z-20 text-white flex flex-col items-center justify-center shadow-md transition-all duration-300 px-6.5 backdrop-blur-md bg-gradient-to-b from-primaryGradientStart to-primaryGradientEnd',
       cameraStore.overlayMode === 'capture'
-        ? ' py-3 bg-black/65 h-fit'
+        ? 'py-3 bg-black/65 h-fit'
         : 'top-0 bottom-0 h-[45dvh] py-6.5',
     ]"
     :style="

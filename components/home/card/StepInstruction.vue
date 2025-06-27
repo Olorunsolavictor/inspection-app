@@ -19,21 +19,22 @@ const dynamicPart = computed(() => viewMap[step.value] || "selected part");
 </script>
 
 <template>
-  <div class="text-lg text-start flex-1 py-2 leading-relaxed text-gray-primay">
+  <div class="text-lg text-start flex-1 py-2 leading-relaxed text-gray-primary">
     <template v-if="step === 1">
       <p>
         Park your vehicle in a
-        <span class="font-semibold"> well-lit</span>,
-        <span class="font-semibold"> shaded</span>, and
-        <span class="font-semibold"> spacious</span> area, ensuring there are no
+        <span class="font-semibold">well-lit</span>,
+        <span class="font-semibold">shaded</span>, and
+        <span class="font-semibold">spacious</span> area, ensuring there are no
         obstructions.
       </p>
     </template>
+
     <template v-else-if="step === 6">
       <div class="space-y-4 text-left text-gray-700 text-lg">
-        <p class="text-lg">
+        <p>
           Take a picture of your <span class="font-semibold">vehicle’s</span>
-          <span class="text-green-primary font-semibold"> chassis number</span>.
+          <span class="text-green-primary font-semibold">chassis number</span>.
         </p>
 
         <div class="space-y-2 text-sm">
