@@ -142,8 +142,8 @@ const indicatorStyle = computed<CSSProperties>(() => {
     case "landscape-secondary":
       return {
         position: "absolute",
-        left: "20px",
-        bottom: "10px",
+        left: "2%",
+        bottom: "7%",
         flexDirection: "column",
       };
     default:
@@ -168,8 +168,8 @@ const capturedImageStyle = computed<CSSProperties>(() => {
     case "landscape-secondary":
       return {
         position: "absolute",
-        top: "25%",
-        left: "12%",
+        bottom: "25%",
+        left: "25%",
         // transform: "rotate(180deg)",
         width: "230px",
       };
