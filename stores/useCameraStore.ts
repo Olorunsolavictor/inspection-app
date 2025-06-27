@@ -16,7 +16,7 @@ export const useCameraStore = defineStore("camera", () => {
   const overlayMode = ref<OverlayMode>(null);
   const showRotateNotice = ref(true);
   const capturedImage = ref<string | null>(null);
-
+  const isVerifying = ref(false);
   const steps = ref<Step[]>([
     "Front",
     "Left Side",
@@ -45,10 +45,14 @@ export const useCameraStore = defineStore("camera", () => {
   function setCapturedImage(image: string) {
     capturedImage.value = image;
   }
-
   function verifyImage() {
-    if (capturedImage.value) {
-      completedSteps.value[currentStep.value] = capturedImage.value;
+    if (!capturedImage.value) return;
+
+    isVerifying.value = true;
+
+    // Fake delay (e.g. 1.2 seconds)
+    setTimeout(() => {
+      completedSteps.value[currentStep.value] = capturedImage.value!;
       capturedImage.value = null;
 
       if (currentStepIndex.value < steps.value.length - 1) {
@@ -62,7 +66,9 @@ export const useCameraStore = defineStore("camera", () => {
         "inspectionData",
         JSON.stringify(completedSteps.value)
       );
-    }
+
+      isVerifying.value = false;
+    }, 3000);
   }
 
   function resetCameraUI() {
@@ -93,5 +99,6 @@ export const useCameraStore = defineStore("camera", () => {
     verifyImage,
     resetCameraUI,
     sizeError,
+    isVerifying,
   };
 });

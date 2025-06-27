@@ -22,3 +22,17 @@
   --color-primary: #023436;
   --color-bgDarkSecondary: #012223;
 }
+.suspense-loading-icon {
+  animation-name: suspense-loading-icon;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes suspense-loading-icon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

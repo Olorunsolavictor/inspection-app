@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Button from "../util/Button.vue";
+import spinner from "~/assets/svgs/loading-spinner.svg";
 import { useCameraStore } from "~/stores/useCameraStore";
 
 const props = defineProps<{
@@ -17,7 +18,14 @@ const cameraStore = useCameraStore();
     :class="props.sectionRotationClass"
   >
     <div class="gap-1 text-center">
-      <h1 class="text-[22px] font-semibold">
+      <h1 v-if="cameraStore.isVerifying" class="text-[22px] font-semibold">
+        Verifying
+        <span class="text-green-success font-semibold">{{
+          cameraStore.currentStep
+        }}</span>
+        View
+      </h1>
+      <h1 v-else class="text-[22px] font-semibold">
         Vehicle
         <span class="text-green-success font-semibold">{{
           cameraStore.currentStep
@@ -25,15 +33,36 @@ const cameraStore = useCameraStore();
         View
       </h1>
     </div>
-    <h3 class="text-sm mt-2 font-medium">
+    <div v-if="cameraStore.isVerifying">
+      <img :src="spinner" alt="loading spinner" class="suspense-loading-icon" />
+    </div>
+    <h3
+      v-if="cameraStore.isVerifying"
+      class="text-sm mt-2 text-center font-medium"
+    >
+      Hold on while we verify <br />
+      your image
+    </h3>
+    <h3 v-else class="text-sm mt-2 font-medium">
       Confirm Vehicle <span>{{ cameraStore.currentStep }}</span> View to<br />
       move to the next Vehicle view
     </h3>
-    <div class="flex w-[80%] mt-12 gap-2 items-center justify-center">
-      <Button variant="outline" size="sm" @click="props.onRecapture"
-        >Re-Capture</Button
+
+    <div class="flex w-[80%] mt-5 gap-2 items-center justify-center">
+      <Button
+        variant="outline"
+        size="sm"
+        :disabled="cameraStore.isVerifying"
+        @click="props.onRecapture"
+        >Re-capture</Button
       >
-      <Button variant="filled" size="sm" @click="props.onVerify">Verify</Button>
+      <Button
+        variant="filled"
+        size="sm"
+        :disabled="cameraStore.isVerifying"
+        @click="props.onVerify"
+        >Verify</Button
+      >
     </div>
   </section>
 </template>

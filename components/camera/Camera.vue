@@ -55,6 +55,12 @@ import type { CSSProperties } from "vue";
 const indicatorStyle = computed<CSSProperties>(() => {
   switch (orientationLabel.value) {
     case "landscape-primary":
+      return {
+        position: "absolute",
+        lefte: "20px",
+        bottom: "10px",
+        flexDirection: "column",
+      };
     case "landscape-secondary":
       return {
         position: "absolute",
