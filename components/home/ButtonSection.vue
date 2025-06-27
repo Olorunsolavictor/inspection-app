@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useStepStore } from "~/stores/useStepStore";
+import Button from "../util/Button.vue";
 
 const stepStore = useStepStore();
 

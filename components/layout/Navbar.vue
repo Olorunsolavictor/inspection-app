@@ -6,14 +6,14 @@ const route = useRoute();
 
 const links = [
   { name: "Home", path: "/" },
-  { name: "Gallery", path: "/gallery" },
   { name: "Camera", path: "/camera" },
+  { name: "Gallery", path: "/gallery" },
 ];
 </script>
 
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-50 px-4 py-3 bg-white shadow-md flex items-center justify-around text-sm font-medium"
+    class="fixed top-0 left-0 right-0 z-50 px-4 py-3 bg-white shadow-md flex items-center justify-center text-sm font-medium"
   >
     <button
       v-for="link in links"

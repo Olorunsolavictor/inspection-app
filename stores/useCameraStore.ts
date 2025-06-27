@@ -1,4 +1,3 @@
-// stores/useCameraStore.ts
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
@@ -29,6 +28,7 @@ export const useCameraStore = defineStore("camera", () => {
   ]);
 
   const currentStepIndex = ref(0);
+  const sizeError = ref(false);
 
   const completedSteps = ref<Record<Step, string>>({} as Record<Step, string>);
 
@@ -66,7 +66,7 @@ export const useCameraStore = defineStore("camera", () => {
   }
 
   function resetCameraUI() {
-    overlayMode.value = "menu";
+    overlayMode.value = null;
     showRotateNotice.value = true;
     capturedImage.value = null;
     currentStepIndex.value = 0;
@@ -86,5 +86,6 @@ export const useCameraStore = defineStore("camera", () => {
     setCapturedImage,
     verifyImage,
     resetCameraUI,
+    sizeError,
   };
 });

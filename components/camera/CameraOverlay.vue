@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCameraStore } from "~/stores/useCameraStore";
 import { useRouter } from "vue-router";
+import Button from "../util/Button.vue";
 
 const props = defineProps<{
   onCapture: () => void;
@@ -131,7 +132,7 @@ const imageSrc = computed(() => {
       </div>
 
       <h3 class="text-sm mt-2 font-medium">
-        Confirm Vehicle <Span>{{ cameraStore.currentStep }}</Span> View to<br />
+        Confirm Vehicle <span>{{ cameraStore.currentStep }}</span> View to<br />
         move to the next Vehicle view
       </h3>
       <div class="flex w-[80%] mt-12 gap-2 items-center justify-center">

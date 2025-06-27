@@ -1,6 +1,8 @@
 <script setup>
+import InspectionGallery from "~/components/gallery/InspectionGallery.vue";
+import Button from "~/components/util/Button.vue";
 definePageMeta({
-  layout: "home",
+  layout: "base",
 });
 </script>
 
