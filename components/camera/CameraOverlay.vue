@@ -148,7 +148,7 @@ const sectionRotationClass = computed(() => {
     case "landscape-primary":
       return "-rotate-360"; // 90deg rotation clockwise
     case "landscape-secondary":
-      return "-rotate-180"; // -90deg rotation (270deg clockwise)
+      return "rotate-180"; // -90deg rotation (270deg clockwise)
     default:
       return "";
   }
