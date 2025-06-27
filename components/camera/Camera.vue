@@ -16,6 +16,7 @@ import Button from "~/components/util/Button.vue";
 
 const router = useRouter();
 const cameraStore = useCameraStore();
+
 const orientationLabel = ref<
   | "portrait-primary"
   | "portrait-secondary"
@@ -102,7 +103,6 @@ const indicatorStyle = computed<CSSProperties>(() => {
           position: "absolute",
           bottom: "10%",
           left: "0px",
-          width: "content-fit",
           flexDirection: "column",
         };
       case "landscape-secondary":
@@ -137,7 +137,6 @@ const indicatorStyle = computed<CSSProperties>(() => {
         right: "2%",
         bottom: "7%",
         flexDirection: "column",
-        rotate: "360deg",
       };
     case "landscape-secondary":
       return {
@@ -162,7 +161,6 @@ const capturedImageStyle = computed<CSSProperties>(() => {
         position: "absolute",
         bottom: "25%",
         right: "12%",
-        // transform: "rotate(0deg)",
         width: "230px",
       };
     case "landscape-secondary":
@@ -170,7 +168,6 @@ const capturedImageStyle = computed<CSSProperties>(() => {
         position: "absolute",
         bottom: "25%",
         left: "25%",
-        // transform: "rotate(180deg)",
         width: "230px",
       };
     case "portrait-secondary":
@@ -194,7 +191,8 @@ const capturedImageStyle = computed<CSSProperties>(() => {
 </script>
 
 <template>
-  <div class="relative w-full h-[100dvh] flex flex-col bg-black text-white">
+  <div class="relative w-screen h-screen bg-black text-white overflow-hidden">
+    <!-- Rotate Notice -->
     <div
       v-if="cameraStore.showRotateNotice"
       class="absolute inset-0 bg-black/70 z-30 flex items-center justify-center"
@@ -202,35 +200,40 @@ const capturedImageStyle = computed<CSSProperties>(() => {
       <p class="text-lg animate-pulse">Rotate Device</p>
     </div>
 
-    <StepIndicator :style="indicatorStyle" />
-
-    <div class="w-[100dvw] relative h-[100dvh] bg-black rounded">
-      <CameraOverlay :on-capture="capturePhoto" />
+    <!-- Camera Preview Fullscreen -->
+    <div class="relative w-full h-full bg-black overflow-hidden">
       <video
         ref="videoRef"
         class="w-full h-full object-cover"
         autoplay
         playsinline
       />
+      <CameraOverlay :on-capture="capturePhoto" />
+
+      <!-- Overlay container pinned to video -->
+      <div class="absolute inset-0 z-10 pointer-events-none">
+        <StepIndicator :style="indicatorStyle" />
+
+        <div
+          v-if="cameraStore.capturedImage"
+          :style="capturedImageStyle"
+          class="bg-white p-2 rounded border border-black border-dashed shadow-lg w-fit pointer-events-auto"
+        >
+          <img
+            :src="cameraStore.capturedImage"
+            alt="Captured"
+            class="w-full rounded"
+          />
+        </div>
+      </div>
     </div>
 
     <canvas ref="canvasRef" class="hidden" />
 
-    <div
-      v-if="cameraStore.capturedImage"
-      :style="capturedImageStyle"
-      class="bg-white p-2 rounded border border-black border-dashed shadow-lg"
-    >
-      <img
-        :src="cameraStore.capturedImage"
-        alt="Captured"
-        class="w-full rounded"
-      />
-    </div>
-
+    <!-- Error Message -->
     <div
       v-if="errorMessage || cameraStore.sizeError"
-      class="absolute bottom-30 text-sm text-center flex justify-center items-center flex-col gap-2 w-full"
+      class="absolute bottom-30 text-sm text-center flex justify-center items-center flex-col gap-2 w-full z-20"
     >
       <p class="text-red-500 max-w-[70%]">
         {{
