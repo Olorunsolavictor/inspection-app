@@ -196,7 +196,7 @@ const capturedImageStyle = computed<CSSProperties>(() => {
 
     <StepIndicator :style="indicatorStyle" />
 
-    <div class="w-full h-full bg-black rounded overflow-hidden">
+    <div class="w-full relative h-full bg-black rounded overflow-hidden">
       <CameraOverlay :on-capture="capturePhoto" />
       <video
         ref="videoRef"
