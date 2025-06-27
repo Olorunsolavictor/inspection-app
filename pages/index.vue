@@ -6,6 +6,10 @@ import Card from "~/components/home/card/Card.vue";
 definePageMeta({
   layout: "base",
 });
+const stepStore = useStepStore();
+onMounted(() => {
+  stepStore.resetSteps();
+});
 </script>
 
 <template>

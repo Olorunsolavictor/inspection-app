@@ -72,12 +72,18 @@ export const useCameraStore = defineStore("camera", () => {
     currentStepIndex.value = 0;
     completedSteps.value = {} as Record<Step, string>;
   }
+  function goToPreviousStep() {
+    if (currentStepIndex.value > 0) {
+      currentStepIndex.value -= 1;
+    }
+  }
 
   return {
     overlayMode,
     showRotateNotice,
     capturedImage,
     steps,
+    goToPreviousStep,
     currentStep,
     currentStepIndex,
     completedSteps,

@@ -22,6 +22,9 @@ export const useStepStore = defineStore("step", () => {
     const prev = steps.value[currentIndex - 1];
     if (prev) selectedStep.value = prev;
   }
+  function resetSteps() {
+    selectedStep.value = 1;
+  }
 
   const isStep = (step: number) => computed(() => selectedStep.value === step);
 
@@ -32,5 +35,6 @@ export const useStepStore = defineStore("step", () => {
     nextStep,
     prevStep,
     isStep,
+    resetSteps,
   };
 });

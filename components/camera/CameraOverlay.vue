@@ -24,15 +24,14 @@ function handleStart() {
   cameraStore.setOverlayMode("capture");
 }
 
-function handleGoBack() {
-  router.push("/");
-}
 function handleGallery() {
+  cameraStore.resetCameraUI();
   router.push("/gallery");
 }
 
-function handleHome() {
+function handleGoHome() {
   router.push("/");
+  cameraStore.resetCameraUI();
 }
 
 function handleVerify() {
@@ -90,9 +89,18 @@ const imageSrc = computed(() => {
         />
       </div>
       <div class="w-[80%] flex gap-2 items-center justify-center">
-        <Button variant="outline" size="sm" @click="handleGoBack">
-          Go back
+        <Button
+          variant="outline"
+          size="sm"
+          @click="
+            cameraStore.currentStepIndex > 0
+              ? cameraStore.goToPreviousStep()
+              : handleGoHome()
+          "
+        >
+          Go Back
         </Button>
+
         <Button variant="filled" size="sm" @click="handleStart">Start</Button>
       </div>
     </section>
@@ -110,7 +118,9 @@ const imageSrc = computed(() => {
         </h3>
       </div>
       <div class="flex w-[80%] mt-6 gap-2 items-center justify-center">
-        <Button variant="outline" size="sm" @click="handleHome">Go Home</Button>
+        <Button variant="outline" size="sm" @click="handleGoHome"
+          >Go Home</Button
+        >
         <Button variant="filled" size="sm" @click="handleGallery"
           >Go to Gallery</Button
         >

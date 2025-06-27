@@ -5,6 +5,7 @@ import { useCamera } from "~/composables/useCamera";
 import { useCameraStore } from "~/stores/useCameraStore";
 import CameraOverlay from "~/components/camera/CameraOverlay.vue";
 import StepIndicator from "~/components/camera/StepIndicator.vue";
+import Button from "~/components/util/Button.vue";
 
 const router = useRouter();
 const cameraStore = useCameraStore();
@@ -19,16 +20,14 @@ const {
   capturePhoto,
 } = useCamera();
 
-onMounted(() => {
+onMounted(async () => {
+  await startCamera();
   cameraStore.showRotateNotice = true;
 
-  setTimeout(async () => {
+  setTimeout(() => {
     cameraStore.showRotateNotice = false;
-    await startCamera();
-    if (!errorMessage.value) {
-      cameraStore.setOverlayMode("menu");
-    }
-  }, 4000);
+    cameraStore.setOverlayMode("menu");
+  }, 2000);
 });
 
 watch(capturedImage, (val) => {
@@ -54,7 +53,7 @@ function handleGoBack() {
       v-if="cameraStore.showRotateNotice"
       class="absolute inset-0 h-full bg-black/70 z-30 flex items-center justify-center"
     >
-      <p class="text-lg animate-pulse">🔄 Rotate your camera</p>
+      <p class="text-lg animate-pulse">Rotate Device</p>
     </div>
 
     <CameraOverlay :on-capture="capturePhoto" />

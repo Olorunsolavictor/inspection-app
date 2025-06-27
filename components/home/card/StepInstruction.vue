@@ -9,8 +9,8 @@ const step = computed(() => stepStore.selectedStep);
 const viewMap: Record<number, string> = {
   2: "front view",
   3: "left view",
-  4: "right view",
-  5: "back view",
+  4: "back view",
+  5: "right view",
   7: "dashboard",
   8: "interior back",
 };

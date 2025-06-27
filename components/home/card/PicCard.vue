@@ -6,7 +6,6 @@ const stepStore = useStepStore();
 
 const imageSrc = computed(() => `/images/step-${stepStore.selectedStep}.png`);
 
-// Map step numbers to titles (omit step 1)
 const stepTitles: Record<number, string> = {
   2: "Front View",
   3: "Left View (driver's side)",
