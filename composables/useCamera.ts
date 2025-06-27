@@ -1,4 +1,3 @@
-// composables/useCamera.ts
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
 export function useCamera() {
@@ -9,11 +8,10 @@ export function useCamera() {
   const stream = ref<MediaStream | null>(null);
   const sizeError = ref(false);
 
-  async function startCamera() {
+  async function startCamera(): Promise<boolean> {
     try {
       stream.value = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" } },
-        // video: { facingMode: { exact: "environment" } },
+        video: { facingMode: { exact: "environment" } },
         audio: false,
       });
 
@@ -21,10 +19,14 @@ export function useCamera() {
         videoRef.value.srcObject = stream.value;
         await videoRef.value.play();
       }
+
+      errorMessage.value = null;
+      return true;
     } catch (error) {
       errorMessage.value =
         "Back camera not available or permission denied. Please use a supported device.";
       console.error(error);
+      return false;
     }
   }
 

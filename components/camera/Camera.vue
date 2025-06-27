@@ -114,15 +114,20 @@ const {
   startCamera,
   capturePhoto,
 } = useCamera();
-
 onMounted(async () => {
-  await startCamera();
-  cameraStore.showRotateNotice = true;
+  const success = await startCamera();
 
-  setTimeout(() => {
+  if (success) {
+    cameraStore.showRotateNotice = true;
+
+    setTimeout(() => {
+      cameraStore.showRotateNotice = false;
+      cameraStore.setOverlayMode("menu");
+    }, 2000);
+  } else {
     cameraStore.showRotateNotice = false;
-    cameraStore.setOverlayMode("menu");
-  }, 2000);
+    console.error("Failed to start camera");
+  }
 });
 
 watch(capturedImage, (val) => {
@@ -179,17 +184,19 @@ function handleGoBack() {
 
     <div
       v-if="errorMessage || cameraStore.sizeError"
-      class="absolute bottom-30 text-sm text-center w-full"
+      class="absolute bottom-30 text-sm text-center flex justify-center items-center flex-col gap-2 w-full"
     >
-      <p class="text-red-500 mb-2">
+      <p class="text-red-500 max-w-[70%] text-center mb-2">
         {{
           errorMessage ||
           "Photo too large. Try a closer shot or better lighting."
         }}
       </p>
-      <Button variant="filled" size="sm" @click="handleGoBack">
-        Go Home
-      </Button>
+      <div class="w-[120px] mx-auto">
+        <Button variant="filled" size="sm" @click="handleGoBack">
+          Go Home
+        </Button>
+      </div>
     </div>
   </div>
 </template>

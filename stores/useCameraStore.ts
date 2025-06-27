@@ -50,7 +50,6 @@ export const useCameraStore = defineStore("camera", () => {
 
     isVerifying.value = true;
 
-    // Fake delay (e.g. 1.2 seconds)
     setTimeout(() => {
       completedSteps.value[currentStep.value] = capturedImage.value!;
       capturedImage.value = null;
