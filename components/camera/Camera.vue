@@ -142,7 +142,7 @@ const indicatorStyle = computed<CSSProperties>(() => {
     case "landscape-secondary":
       return {
         position: "absolute",
-        right: "20px",
+        left: "20px",
         bottom: "10px",
         flexDirection: "column",
       };
@@ -158,13 +158,20 @@ const indicatorStyle = computed<CSSProperties>(() => {
 const capturedImageStyle = computed<CSSProperties>(() => {
   switch (orientationLabel.value) {
     case "landscape-primary":
+      return {
+        position: "absolute",
+        bottom: "25%",
+        right: "12%",
+        // transform: "rotate(0deg)",
+        width: "230px",
+      };
     case "landscape-secondary":
       return {
         position: "absolute",
-        bottom: "13%",
-        right: "12%",
-        transform: "rotate(0deg)",
-        width: "40%",
+        top: "25%",
+        left: "12%",
+        // transform: "rotate(180deg)",
+        width: "230px",
       };
     case "portrait-secondary":
       return {
@@ -180,6 +187,7 @@ const capturedImageStyle = computed<CSSProperties>(() => {
         right: "20%",
         transform: "rotate(270deg)",
         flexDirection: "column",
+        width: "230px",
       };
   }
 });
@@ -211,7 +219,7 @@ const capturedImageStyle = computed<CSSProperties>(() => {
     <div
       v-if="cameraStore.capturedImage"
       :style="capturedImageStyle"
-      class="bg-white w-[70%] p-2 rounded border border-black border-dashed shadow-lg"
+      class="bg-white p-2 rounded border border-black border-dashed shadow-lg"
     >
       <img
         :src="cameraStore.capturedImage"
