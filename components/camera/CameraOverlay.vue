@@ -2,7 +2,10 @@
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useCameraStore } from "~/stores/useCameraStore";
 import { useRouter } from "vue-router";
-import Button from "../util/Button.vue";
+import MenuSection from "./MenuSection.vue";
+import CompletedSection from "./CompletedSection.vue";
+import VerifySection from "./VerifySection.vue";
+import CaptureButton from "./CaptureButton.vue";
 
 const props = defineProps<{
   onCapture: () => void;
@@ -21,7 +24,7 @@ const stepImages: Record<string, string> = {
   "Interior Back": "/images/front.png",
 };
 
-// 🧭 Orientation logic
+// Orientation & rotation logic (unchanged)
 const rotationAngle = ref(0);
 
 function updateRotation() {
@@ -80,7 +83,7 @@ type OrientationLabel =
   | "landscape-primary"
   | "landscape-secondary";
 
-const orientationAngle = ref(0); // 0, 90, 180, 270
+const orientationAngle = ref(0);
 const orientationLabel = ref<OrientationLabel>("portrait-primary");
 
 function updateOrientation() {
@@ -89,7 +92,6 @@ function updateOrientation() {
 
   orientationAngle.value = angle;
 
-  // Assign label based on angle
   switch (angle) {
     case 0:
       orientationLabel.value = "portrait-primary";
@@ -108,47 +110,89 @@ function updateOrientation() {
       orientationLabel.value = "portrait-primary";
   }
 }
-
-const containerStyle = computed(() => {
+const captureOverlayStyle = computed(() => {
   switch (orientationLabel.value) {
     case "landscape-primary":
       return {
         top: "0",
-        right: "0",
+        bottom: "0",
         left: "0",
-        width: "90dvh",
         height: "100vh",
+        width: "100px",
       };
     case "landscape-secondary":
       return {
         top: "0",
         bottom: "0",
-        right: "0",
-        width: "90dvh",
+        left: "0",
         height: "100vh",
+        width: "100px",
       };
-    case "portrait-secondary":
     case "portrait-primary":
+    case "portrait-secondary":
     default:
       return {
         left: "0",
         right: "0",
         top: "0",
-        height: "45dvh",
         width: "100vw",
+        height: "auto",
       };
   }
 });
+
+const containerStyle = computed(() => {
+  const baseStyles = (() => {
+    switch (orientationLabel.value) {
+      case "landscape-primary":
+        return {
+          top: "0",
+          right: "0",
+          left: "0",
+          width: "90dvh",
+          height: "100vh",
+        };
+      case "landscape-secondary":
+        return {
+          top: "0",
+          bottom: "0",
+          right: "0",
+          width: "90dvh",
+          height: "100vh",
+        };
+      case "portrait-secondary":
+      case "portrait-primary":
+      default:
+        return {
+          left: "0",
+          right: "0",
+          top: "0",
+          height: "45dvh",
+          width: "100vw",
+        };
+    }
+  })();
+
+  if (cameraStore.overlayMode === "capture") {
+    return {
+      ...baseStyles,
+      width: "100px",
+    };
+  }
+
+  return baseStyles;
+});
+
 const sectionRotationClass = computed(() => {
   switch (orientationLabel.value) {
     case "portrait-primary":
-      return "rotate-270"; // no rotation needed
+      return "rotate-270";
     case "portrait-secondary":
-      return "-rotate-180"; // 180deg rotation
+      return "-rotate-180";
     case "landscape-primary":
-      return "-rotate-360"; // 90deg rotation clockwise
+      return "-rotate-360";
     case "landscape-secondary":
-      return "rotate-360"; //
+      return "rotate-360";
     default:
       return "";
   }
@@ -174,109 +218,37 @@ onUnmounted(() => {
     :class="[
       'absolute w-screen z-20 text-white flex flex-col items-center justify-center shadow-md transition-all duration-300 px-6.5 backdrop-blur-md bg-gradient-to-b from-primaryGradientStart to-primaryGradientEnd',
       cameraStore.overlayMode === 'capture'
-        ? ' h-auto py-3 bg-black/65'
-        : 'top-0 bottom-0 h-[45dvh] py-6.5 ',
+        ? ' py-3 bg-black/65 h-fit'
+        : 'top-0 bottom-0 h-[45dvh] py-6.5',
     ]"
-    :style="containerStyle"
+    :style="
+      cameraStore.overlayMode === 'capture'
+        ? captureOverlayStyle
+        : containerStyle
+    "
   >
-    <!-- Menu -->
-    <section
+    <MenuSection
       v-if="cameraStore.overlayMode === 'menu'"
-      class="flex flex-col items-center mt-4 gap-5 h-fit w-full justify-center"
-      :class="sectionRotationClass"
-    >
-      <div class="gap-1 text-center mb-6">
-        <h1 class="text-[22px] font-semibold">
-          Vehicle
-          <span class="text-green-success">{{ cameraStore.currentStep }}</span>
-          View
-        </h1>
-        <h3 class="text-sm font-medium">
-          Take Vehicle
-          <span class="font-semibold">{{ cameraStore.currentStep }}</span>
-          View
-        </h3>
-      </div>
-      <div class="relative w-full h-[110px] overflow-hidden">
-        <img
-          :src="imageSrc"
-          :alt="cameraStore.currentStep"
-          class="absolute left-1/2 top-1/2 w-auto h-auto max-w-none max-h-none transform -translate-x-1/2 -translate-y-1/2 rotate-[90deg]"
-        />
-      </div>
-      <div class="w-[80%] flex gap-2 items-center justify-center">
-        <Button
-          variant="outline"
-          size="sm"
-          @click="
-            cameraStore.currentStepIndex > 0
-              ? cameraStore.goToPreviousStep()
-              : handleGoHome()
-          "
-        >
-          Go Back
-        </Button>
-        <Button variant="filled" size="sm" @click="handleStart">Start</Button>
-      </div>
-    </section>
-
-    <!-- Completed -->
-    <section
+      :sectionRotationClass="sectionRotationClass"
+      :imageSrc="imageSrc"
+      :onStart="handleStart"
+      :onGoBack="handleGoHome"
+    />
+    <CompletedSection
       v-if="cameraStore.overlayMode === 'completed'"
-      class="flex flex-col items-center rotate-[270deg] mt-4 gap-6 h-fit w-full justify-center"
-    >
-      <div class="gap-1 text-center mb-4">
-        <h1 class="text-[22px] font-bold text-green-success">
-          All Steps Completed
-        </h1>
-        <h3 class="text-sm mt-2 font-medium text-white">
-          You’ve successfully captured<br />
-          all vehicle views.
-        </h3>
-      </div>
-      <div class="flex w-[80%] mt-6 gap-2 items-center justify-center">
-        <Button variant="outline" size="sm" @click="handleGoHome"
-          >Go Home</Button
-        >
-        <Button variant="filled" size="sm" @click="handleGallery"
-          >Go to Gallery</Button
-        >
-      </div>
-    </section>
-
-    <!-- Verify -->
-    <section
+      :sectionRotationClass="sectionRotationClass"
+      :onGoHome="handleGoHome"
+      :onGoGallery="handleGallery"
+    />
+    <VerifySection
       v-if="cameraStore.overlayMode === 'verify'"
-      class="flex flex-col items-center rotate-[270deg] mt-4 gap-6 h-fit w-full justify-between"
-    >
-      <div class="gap-1 text-center">
-        <h1 class="text-[22px] font-semibold">
-          Vehicle
-          <span class="text-green-success font-semibold">{{
-            cameraStore.currentStep
-          }}</span>
-          View
-        </h1>
-      </div>
-      <h3 class="text-sm mt-2 font-medium">
-        Confirm Vehicle <span>{{ cameraStore.currentStep }}</span> View to<br />
-        move to the next Vehicle view
-      </h3>
-      <div class="flex w-[80%] mt-12 gap-2 items-center justify-center">
-        <Button variant="outline" size="sm" @click="handleRecapture">
-          Re-Capture
-        </Button>
-        <Button variant="filled" size="sm" @click="handleVerify">Verify</Button>
-      </div>
-    </section>
-
-    <!-- Capture Button -->
-    <button
+      :sectionRotationClass="sectionRotationClass"
+      :onRecapture="handleRecapture"
+      :onVerify="handleVerify"
+    />
+    <CaptureButton
       v-else-if="cameraStore.overlayMode === 'capture'"
-      @click="props.onCapture"
-      class="text-white h-15 w-15 p-1.5 bg-white rounded-full active:bg-green-primary transition"
-    >
-      <div class="w-full h-full border border-black rounded-full" />
-    </button>
+      :onCapture="props.onCapture"
+    />
   </div>
 </template>

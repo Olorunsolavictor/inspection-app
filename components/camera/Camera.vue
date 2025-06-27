@@ -10,6 +10,95 @@ import Button from "~/components/util/Button.vue";
 const router = useRouter();
 const cameraStore = useCameraStore();
 
+type OrientationLabel =
+  | "portrait-primary"
+  | "portrait-secondary"
+  | "landscape-primary"
+  | "landscape-secondary";
+
+const orientationLabel = ref<OrientationLabel>("portrait-primary");
+
+function updateOrientation() {
+  const angle =
+    window.screen.orientation?.angle ?? (window.orientation as number) ?? 0;
+
+  switch (angle) {
+    case 0:
+      orientationLabel.value = "portrait-primary";
+      break;
+    case 180:
+      orientationLabel.value = "portrait-secondary";
+      break;
+    case 90:
+      orientationLabel.value = "landscape-primary";
+      break;
+    case -90:
+    case 270:
+      orientationLabel.value = "landscape-secondary";
+      break;
+    default:
+      orientationLabel.value = "portrait-primary";
+  }
+}
+
+onMounted(() => {
+  updateOrientation();
+  window.addEventListener("orientationchange", updateOrientation);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("orientationchange", updateOrientation);
+});
+
+import type { CSSProperties } from "vue";
+
+const indicatorStyle = computed<CSSProperties>(() => {
+  switch (orientationLabel.value) {
+    case "landscape-primary":
+    case "landscape-secondary":
+      return {
+        position: "absolute",
+        right: "20px",
+        bottom: "10px",
+        flexDirection: "column",
+      };
+    default:
+      return {
+        position: "absolute",
+        bottom: "10px",
+        right: "20px",
+      };
+  }
+});
+
+const capturedImageStyle = computed<CSSProperties>(() => {
+  switch (orientationLabel.value) {
+    case "landscape-primary":
+    case "landscape-secondary":
+      return {
+        position: "absolute",
+        bottom: "30%",
+        right: "12%",
+        transform: "rotate(0deg)",
+      };
+    case "portrait-secondary":
+      return {
+        position: "absolute",
+        bottom: "30px",
+        left: "50%",
+        transform: "translateX(-50%) rotate(-180deg)",
+      };
+    default:
+      return {
+        position: "absolute",
+        bottom: "20%",
+        right: "20%",
+        transform: " rotate(270deg)",
+        flexDirection: "column",
+      };
+  }
+});
+
 const {
   videoRef,
   canvasRef,
@@ -57,7 +146,7 @@ function handleGoBack() {
     </div>
 
     <CameraOverlay :on-capture="capturePhoto" />
-    <StepIndicator />
+    <StepIndicator :style="indicatorStyle" />
 
     <div class="w-full h-full bg-black rounded overflow-hidden">
       <video
@@ -72,12 +161,13 @@ function handleGoBack() {
 
     <div
       v-if="cameraStore.capturedImage"
-      class="absolute rotate-270 bottom-20 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded shadow-lg"
+      :style="capturedImageStyle"
+      class="bg-white p-2 rounded border border-black divide-dashed border-dashed shadow-lg"
     >
       <img
         :src="cameraStore.capturedImage"
         alt="Captured"
-        class="h-32 w-auto object-cover rounded"
+        class="h-32 w-56 object-cover rounded"
       />
     </div>
 
