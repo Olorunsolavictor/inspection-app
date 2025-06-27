@@ -2,7 +2,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
-type OverlayMode = "menu" | "capture" | "verify" | null;
+type OverlayMode = "menu" | "capture" | "verify" | "completed" | null;
 
 type Step =
   | "Front"
@@ -55,7 +55,7 @@ export const useCameraStore = defineStore("camera", () => {
         currentStepIndex.value += 1;
         overlayMode.value = "menu";
       } else {
-        overlayMode.value = null;
+        overlayMode.value = "completed";
       }
 
       localStorage.setItem(

@@ -26,6 +26,13 @@ function handleStart() {
 function handleGoBack() {
   router.push("/");
 }
+function handleGallery() {
+  router.push("/gallery");
+}
+
+function handleHome() {
+  router.push("/");
+}
 
 function handleVerify() {
   if (cameraStore.capturedImage) {
@@ -46,7 +53,11 @@ const imageSrc = computed(() => {
 
 <template>
   <div
-    v-if="['menu', 'capture', 'verify'].includes(cameraStore.overlayMode ?? '')"
+    v-if="
+      ['menu', 'capture', 'verify', 'completed'].includes(
+        cameraStore.overlayMode ?? ''
+      )
+    "
     :class="[
       'absolute w-screen z-20 text-white flex flex-col items-center justify-center shadow-md transition-all duration-300 px-6.5 backdrop-blur-md bg-gradient-to-b from-primaryGradientStart to-primaryGradientEnd',
       cameraStore.overlayMode === 'capture'
@@ -84,6 +95,27 @@ const imageSrc = computed(() => {
         <Button variant="filled" size="sm" @click="handleStart">Start</Button>
       </div>
     </section>
+    <section
+      v-if="cameraStore.overlayMode === 'completed'"
+      class="flex flex-col items-center rotate-[270deg] mt-4 gap-6 h-fit w-full justify-center"
+    >
+      <div class="gap-1 text-center mb-4">
+        <h1 class="text-[22px] font-bold text-green-success">
+          All Steps Completed
+        </h1>
+        <h3 class="text-sm mt-2 font-medium text-white">
+          You’ve successfully captured<br />
+          all vehicle views.
+        </h3>
+      </div>
+      <div class="flex w-[80%] mt-6 gap-2 items-center justify-center">
+        <Button variant="outline" size="sm" @click="handleHome">Go Home</Button>
+        <Button variant="filled" size="sm" @click="handleGallery"
+          >Go to Gallery</Button
+        >
+      </div>
+    </section>
+
     <section
       v-if="cameraStore.overlayMode === 'verify'"
       class="flex flex-col items-center rotate-[270deg] mt-4 gap-6 h-fit w-full justify-between"

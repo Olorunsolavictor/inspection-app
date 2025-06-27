@@ -1,5 +1,7 @@
 <script setup>
-import InspectionGallery from "~/components/InspectionGallery.vue";
+definePageMeta({
+  layout: "home",
+});
 </script>
 
 <template>
