@@ -159,15 +159,15 @@ const capturedImageStyle = computed<CSSProperties>(() => {
     case "landscape-primary":
       return {
         position: "absolute",
-        bottom: "25%",
+        bottom: "20%",
         right: "12%",
         width: "230px",
       };
     case "landscape-secondary":
       return {
         position: "absolute",
-        bottom: "25%",
-        left: "25%",
+        bottom: "20%",
+        left: "12%",
         width: "230px",
       };
     case "portrait-secondary":
