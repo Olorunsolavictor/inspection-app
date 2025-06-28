@@ -148,7 +148,7 @@ const containerStyle = computed(() => {
           top: "0",
           right: "0",
           left: "0",
-          width: "90dvh",
+          width: "45dvw",
           height: "100vh",
         };
       case "landscape-secondary":
@@ -156,7 +156,7 @@ const containerStyle = computed(() => {
           top: "0",
           bottom: "0",
           right: "0",
-          width: "90dvh",
+          width: "45dvw",
           height: "100vh",
         };
       case "portrait-secondary":
@@ -218,7 +218,7 @@ onUnmounted(() => {
       'absolute z-20 text-white flex flex-col items-center justify-center shadow-md transition-all duration-300 px-6.5 backdrop-blur-md bg-gradient-to-b from-primaryGradientStart to-primaryGradientEnd',
       cameraStore.overlayMode === 'capture'
         ? 'py-3 bg-black/65 h-fit'
-        : 'top-0 bottom-0 h-[55dvh] py-6.5',
+        : 'top-0 bottom-0 h-[45dvh] py-6.5',
     ]"
     :style="
       cameraStore.overlayMode === 'capture'
