@@ -31,7 +31,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="w-full min-h-screen md:w-[400px] mx-auto gap-10 px-5 pt-5 pb-10 flex flex-col justify-start text-gray-primary font-semibold"
+    class="w-full min-h-screen md:w-[400px] mx-auto gap-10 px-5 pt-5 pb-10 flex flex-col justify-start text-gray-primary"
   >
     <Header />
     <Card />

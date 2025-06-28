@@ -1,26 +1,33 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import Button from "~/components/util/Button.vue";
+import download from "~/assets/svgs/downloadIcon.svg";
 
 const images = ref<string[]>([]);
 const previewedImage = ref<string | null>(null);
+let originalData = ref<Record<string, string>>({});
 
 function loadImages() {
   const stored = localStorage.getItem("inspectionData");
   if (stored) {
-    const parsed = JSON.parse(stored);
-    images.value = Object.values(parsed);
+    originalData.value = JSON.parse(stored);
+    images.value = Object.values(originalData.value);
   }
 }
 
 function clearGallery() {
   localStorage.removeItem("inspectionData");
   images.value = [];
+  originalData.value = {};
 }
 
 function deleteImage(index: number) {
-  images.value.splice(index, 1);
-  localStorage.setItem("inspectionData", JSON.stringify(images.value));
+  const keyToDelete = Object.keys(originalData.value)[index];
+  if (keyToDelete) {
+    delete originalData.value[keyToDelete];
+    images.value = Object.values(originalData.value);
+    localStorage.setItem("inspectionData", JSON.stringify(originalData.value));
+  }
 }
 
 function previewImage(src: string) {
@@ -75,10 +82,10 @@ onMounted(() => {
           <p class="text-sm text-gray-primary">Step {{ index + 1 }}</p>
           <a
             :href="src"
-            download
             class="text-xs text-purple-primary hover:underline"
+            :download="`inspection-photo-${index + 1}.jpg`"
           >
-            Download
+            <img :src="download" alt="" />
           </a>
         </div>
       </div>

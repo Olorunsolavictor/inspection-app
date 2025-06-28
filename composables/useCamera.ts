@@ -11,8 +11,8 @@ export function useCamera() {
   async function startCamera(): Promise<boolean> {
     try {
       stream.value = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" } },
-        // video: { facingMode: { exact: "environment" } },
+        // video: { facingMode: { ideal: "environment" } },
+        video: { facingMode: { exact: "environment" } },
         audio: false,
       });
 

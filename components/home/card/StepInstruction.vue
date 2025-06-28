@@ -23,9 +23,9 @@ const dynamicPart = computed(() => viewMap[step.value] || "selected part");
     <template v-if="step === 1">
       <p>
         Park your vehicle in a
-        <span class="font-semibold">well-lit</span>,
-        <span class="font-semibold">shaded</span>, and
-        <span class="font-semibold">spacious</span> area, ensuring there are no
+        <span class="font-medium">well-lit</span>,
+        <span class="font-medium">shaded</span>, and
+        <span class="font-medium">spacious</span> area, ensuring there are no
         obstructions.
       </p>
     </template>

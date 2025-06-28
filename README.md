@@ -1,100 +1,114 @@
-# Inspection App
+# (Vehicle) Inspection App
 
-This is a responsive inspection web application built using Nuxt 3, Vue 3, TypeScript, Pinia, and Tailwind CSS. The application allows users to access their device's back camera, take step-by-step inspection photos, preview them, and manage the images locally via the browser.
+A mobile-first web application for guided vehicle inspections. Built with Nuxt 3, Vue 3, TypeScript, and Tailwind CSS, the app enables users to take photos using their device's back camera, follow a defined inspection process, preview each capture, and manage images locally.
+
+---
 
 ## Setup Instructions
 
-1. Clone the repository:
+### Requirements
+
+- Node.js v18 or higher
+- npm v9 or higher
+- Git
+
+### Installation
 
 ```bash
-git clone https://github.com/victor-olorunsola/inspection-app.git
-cd inspection-app
-```
-
-2. Install dependencies:
-
-```bash
+git clone https://github.com/Olorunsolavictor/inspection-app.git
+cd my-nuxt-app
 npm install
 ```
 
-3. Start the development server:
+### Development
 
 ```bash
 npm run dev
 ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000).
+The application will be available at:  
+[http://localhost:3000](http://localhost:3000)
+
+### Running Tests
+
+```bash
+npm run test
+```
+
+Vitest is configured for component-level testing.
+
+---
+
+## How to Use the App
+
+1. **Launch the App**  
+   Open the application on a supported mobile browser (iOS Safari or Android Chrome). The app is optimized for mobile and expects a device with a working back-facing camera.
+
+2. **Start Inspection**  
+   Proceed through the onboarding steps. These are introductory and guide the user before the actual inspection.
+
+3. **Camera Access**  
+   Allow the browser to access your device’s camera. If access is denied or no camera is detected, an error message is displayed.
+
+4. **Photo Capture**  
+   You’ll be guided to take photos for each inspection step:
+
+   - Front View
+   - Left Side View
+   - Right Side View
+   - Back View
+   - Chassis Number
+   - Dashboard View
+   - Interior Back View
+
+   Tap the screen to focus. A countdown ring indicates when the photo will be taken. After capture, you can either approve (verify) the photo or retake it.
+
+5. **Image Review**  
+   Confirmed images are stored locally. The app automatically moves to the next step in the flow.
+
+6. **Gallery View**  
+   After all steps are completed, a gallery is shown containing all the approved images.
+
+7. \*\*Download Captures
+   Users can download individual images from the gallery.
+
+---
 
 ## Summary of Features Implemented
 
-Camera Access:
+- Camera access using `getUserMedia` API with support for back-facing camera
+- Compatible with iOS and Andriod
+- Portrait and landscape orientation handling
+- Capture validation: images must be JPG/PNG under 2MB
+- Local storage of confirmed images
+- Optional download of each captured image
+- Guided inspection flow using defined steps
+- Tap-to-focus with animated countdown
+- Overlay-based capture interface
+- Final gallery view of all captured photos
+- Built-in state management using Pinia
+- Modular architecture using composables and scoped styles
+- Fully responsive layout using Tailwind CSS
+- Testable components using Vitest
 
-- The application attempts to access the device's back-facing camera using the MediaDevices API.
-- If the camera is not available or permission is denied, an appropriate error message is shown.
-
-Step-by-Step Photo Capture:
-
-- Users are guided through a predefined sequence of inspection steps.
-- One image is captured per step, and each is labeled accordingly.
-
-Image Validation:
-
-- Captured images are compressed and checked to ensure they are under 2MB.
-- Both JPEG and PNG formats are supported depending on the compression.
-
-Gallery View:
-
-- Captured images are displayed in a simple gallery view with labels.
-- Users can clear all saved images when needed.
-
-State Management:
-
-- Pinia is used for managing camera overlay state and tracking inspection progress.
-
-Styling and Layout:
-
-- Tailwind CSS is used for styling.
-- The layout is mobile-first and responsive.
-
-SEO and Metadata:
-
-- Basic head meta tags are added using `useHead()`.
+---
 
 ## Known Limitations or Assumptions
 
-- Devices without a back-facing camera will not be able to use the capture functionality.
-- All images are stored locally using localStorage; no cloud storage or backend integration is included.
-- There is a download option for captured images.
-- No formal testing framework has been implemented yet. The project is structured to support Vitest or Playwright if required.
+- The app (Capture) only works on devices with a functional rear-facing camera
+- Captures are stored in browser `localStorage` which may be cleared by the browser
+- Orientation detection may behave differently on older iOS versions due to limited support for screen orintation
+- No server or cloud storage integration is provided; all operations are frontend-on
+- Test coverage is minimal but setup is in place
 
-## Folder Structure Overview
-
-```
-pages/
-  index.vue             # App entry point
-  camera.vue
-  gallery.vue
-components/
-camera/
-
-  home/
-    Header.vue          # App title and header
-    Card.vue            # Step instructions and preview
-    ButtonSection.vue   # Primary action buttons
-composables/
-  useCamera.ts          # Camera logic and helpers
-stores/
-  camera.ts             # State management for inspection steps
-assets/css/
-  app.css               # Global styles
-```
+---
 
 ## Deployment
 
-The project is deployed using platforms such as Vercel.
-https://inspection-app-one.vercel.app
+This project is deployed and accessible at:
 
-## Author
+**[https://inspection-app-one.vercel.app/](https://inspection-app-one.vercel.app/)**
 
-Victor Olorunsola
-Frontend Developer
+---
+
+Developed by Victor Olorunsola

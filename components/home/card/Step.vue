@@ -14,17 +14,26 @@ const isSelected = computed(() => stepStore.selectedStep === props.step);
 <template>
   <div
     :class="[
-      'rounded-full bg-white px-2 py-0.5 flex justify-center items-center text-sm font-medium transition-all duration-300 ease-in-out',
+      'rounded-full bg-white px-2 py-1.5 flex justify-center items-center text-sm font-medium  transition-all duration-300 ease-in-out gap-1',
       isSelected
-        ? 'whitespace-nowrap rounded-lg gap-1 text-gray-700 px-4 min-w-[70px]'
-        : 'text-gray-700',
+        ? 'text-gray-primary  min-w-[70px]'
+        : 'text-gray-secondary opacity-70',
     ]"
     role="presentation"
     :aria-label="`Inspection step: ${step}`"
     :aria-selected="isSelected"
   >
-    <span v-if="isSelected" class="text-gray-700">STEP</span>
-    <span :class="isSelected ? 'text-purple-primary' : 'text-gray-light'">
+    <span
+      class="transition-opacity duration-300"
+      :class="isSelected ? 'opacity-100 text-gray-primary' : 'opacity-0 w-0'"
+    >
+      STEP
+    </span>
+
+    <span
+      class="transition-colors duration-300"
+      :class="isSelected ? 'text-purple-primary' : 'text-gray-light'"
+    >
       {{ step }}
     </span>
   </div>

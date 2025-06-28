@@ -10,10 +10,10 @@ const steps = stepStore.steps;
 
 <template>
   <div
-    class="w-full h-fit px-3 pt-8 flex flex-col justify-between items-center gap-8 rounded-xl text-sm bg-purple-secondary"
+    class="w-full h-fit px-2 pb-0.5 pt-8 flex flex-col justify-between items-center gap-8 rounded-xl text-sm bg-purple-secondary"
   >
     <section
-      class="w-full flex flex-wrap justify-center md:justify-between gap-2"
+      class="w-full flex flex-wrap justify-between gap-1"
       aria-label="Inspection steps"
     >
       <Step v-for="step in steps" :key="step" :step="step" />
