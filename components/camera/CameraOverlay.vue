@@ -35,7 +35,10 @@ function updateRotation() {
 onMounted(() => {
   updateRotation();
   window.addEventListener("orientationchange", updateRotation);
+  updateOrientation();
+  window.addEventListener("orientationchange", updateOrientation);
 });
+
 onUnmounted(() => {
   window.removeEventListener("orientationchange", updateRotation);
 });
@@ -195,11 +198,6 @@ const sectionRotationClass = computed(() => {
     default:
       return "";
   }
-});
-
-onMounted(() => {
-  updateOrientation();
-  window.addEventListener("orientationchange", updateOrientation);
 });
 
 onUnmounted(() => {

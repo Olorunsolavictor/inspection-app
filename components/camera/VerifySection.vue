@@ -14,32 +14,26 @@ const cameraStore = useCameraStore();
 
 <template>
   <section
-    class="flex flex-col items-center mt-4 gap-6 h-fit w-full justify-between"
+    class="flex flex-col items-center mt-4 gap-6 h-fit w-full justify-between text-center"
     :class="props.sectionRotationClass"
+    :aria-busy="cameraStore.isVerifying"
+    aria-live="polite"
   >
-    <div class="gap-1 text-center">
-      <h1 v-if="cameraStore.isVerifying" class="text-[22px] font-semibold">
-        Verifying
-        <span class="text-green-success font-semibold">{{
-          cameraStore.currentStep
-        }}</span>
-        View
-      </h1>
-      <h1 v-else class="text-[22px] font-semibold">
-        Vehicle
-        <span class="text-green-success font-semibold">{{
-          cameraStore.currentStep
-        }}</span>
+    <div>
+      <h1 class="text-[22px] font-semibold">
+        {{ cameraStore.isVerifying ? "Verifying" : "Vehicle" }}
+        <span class="text-green-success font-semibold">
+          {{ cameraStore.currentStep }}
+        </span>
         View
       </h1>
     </div>
+
     <div v-if="cameraStore.isVerifying">
       <img :src="spinner" alt="loading spinner" class="suspense-loading-icon" />
     </div>
-    <h3
-      v-if="cameraStore.isVerifying"
-      class="text-sm mt-2 text-center font-medium"
-    >
+
+    <h3 v-if="cameraStore.isVerifying" class="text-sm mt-2 font-medium">
       Hold on while we verify <br />
       your image
     </h3>
@@ -48,23 +42,27 @@ const cameraStore = useCameraStore();
       move to the next Vehicle view
     </h3>
 
-    <div class="flex w-[250px] mt-5 gap-2 items-center justify-center">
+    <div
+      class="flex w-full max-w-[250px] mt-5 gap-2 items-center justify-center"
+    >
       <Button
         variant="outline"
         size="sm"
         full-width
         :disabled="cameraStore.isVerifying"
         @click="props.onRecapture"
-        >Re-capture</Button
       >
+        Re-capture
+      </Button>
       <Button
         variant="filled"
         size="sm"
         full-width
         :disabled="cameraStore.isVerifying"
         @click="props.onVerify"
-        >Verify</Button
       >
+        Verify
+      </Button>
     </div>
   </section>
 </template>

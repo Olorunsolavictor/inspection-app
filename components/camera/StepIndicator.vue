@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, computed } from "vue";
 import { useCameraStore } from "~/stores/useCameraStore";
-import checkWhite from "~/assets/svgs/check-gray.svg";
-import checkGray from "~/assets/svgs/check-white.svg";
+import checkWhite from "~/assets/svgs/check-white.svg";
+import checkGray from "~/assets/svgs/check-gray.svg";
 
 const cameraStore = useCameraStore();
 

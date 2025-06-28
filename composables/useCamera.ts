@@ -44,7 +44,7 @@ export function useCamera() {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     let imageDataUrl = canvas.toDataURL("image/jpeg", 0.8);
-    let imageSize = Math.ceil((imageDataUrl.length * 3) / 4); // bytes
+    let imageSize = Math.ceil((imageDataUrl.length * 3) / 4);
 
     if (imageSize > 2 * 1024 * 1024) {
       imageDataUrl = canvas.toDataURL("image/png");

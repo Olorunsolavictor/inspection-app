@@ -9,6 +9,7 @@ import {
 } from "vue";
 import { useRouter } from "vue-router";
 import { useCamera } from "~/composables/useCamera";
+import { useFocusHighlight } from "~/composables/useFocusHighlight";
 import { useCameraStore } from "~/stores/useCameraStore";
 import CameraOverlay from "~/components/camera/CameraOverlay.vue";
 import StepIndicator from "~/components/camera/StepIndicator.vue";
@@ -16,6 +17,8 @@ import Button from "~/components/util/Button.vue";
 
 const router = useRouter();
 const cameraStore = useCameraStore();
+
+const { focusPoint, handleFocusTap } = useFocusHighlight();
 
 const orientationLabel = ref<
   | "portrait-primary"
@@ -199,18 +202,30 @@ const capturedImageStyle = computed<CSSProperties>(() => {
       <p class="text-lg animate-pulse">Rotate Device</p>
     </div>
 
+    <div
+      v-if="focusPoint && cameraStore.overlayMode === 'capture'"
+      class="absolute z-30 border-2 border-green-success rounded-sm pointer-events-none transition-opacity duration-300"
+      :style="{
+        top: `${focusPoint.y - 25}px`,
+        left: `${focusPoint.x - 25}px`,
+        width: '55%',
+        height: '180px',
+      }"
+    />
+
     <div class="relative w-full h-full bg-black overflow-hidden">
       <video
         ref="videoRef"
         class="w-full h-full object-cover"
         autoplay
         playsinline
+        @click="(e) => handleFocusTap(e, e.currentTarget)"
+        @touchstart="(e) => handleFocusTap(e, e.currentTarget)"
       />
       <CameraOverlay :on-capture="capturePhoto" />
 
       <div class="absolute inset-0 z-10 pointer-events-none">
         <StepIndicator :style="indicatorStyle" />
-
         <div
           v-if="cameraStore.capturedImage"
           :style="capturedImageStyle"
