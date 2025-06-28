@@ -18,7 +18,7 @@ import Button from "~/components/util/Button.vue";
 const router = useRouter();
 const cameraStore = useCameraStore();
 
-const { focusPoint, handleFocusTap } = useFocusHighlight();
+const { focusPoint, handleFocusTap, focusTimer } = useFocusHighlight();
 
 const orientationLabel = ref<
   | "portrait-primary"
@@ -96,66 +96,67 @@ function handleGoBack() {
   router.push("/");
 }
 
-const indicatorStyle = computed<CSSProperties>(() => {
-  const isCaptureMode = cameraStore.overlayMode === "capture";
+// const indicatorStyle = computed<CSSProperties>(() => {
+//   const isCaptureMode = cameraStore.overlayMode === "capture";
 
-  if (isCaptureMode) {
-    switch (orientationLabel.value) {
-      case "landscape-primary":
-        return {
-          position: "absolute",
-          bottom: "10%",
-          left: "2%",
-          flexDirection: "column",
-        };
-      case "landscape-secondary":
-        return {
-          position: "absolute",
-          bottom: "10%",
-          right: "20px",
-          flexDirection: "column",
-        };
-      case "portrait-primary":
-        return {
-          position: "absolute",
-          top: "2%",
-          right: "20px",
-          flexDirection: "row",
-        };
-      default:
-        return {
-          position: "absolute",
-          right: "50%",
-          transform: "translateX(-50%)",
-          flexDirection: "row",
-          bottom: "24px",
-        };
-    }
-  }
+//   if (isCaptureMode) {
+//     switch (orientationLabel.value) {
+//       case "landscape-primary":
+//         return {
+//           position: "absolute",
+//           bottom: "10%",
+//           left: "2%",
+//           flexDirection: "column",
+//         };
+//       case "landscape-secondary":
+//         return {
+//           position: "absolute",
+//           bottom: "10%",
+//           right: "20px",
+//           flexDirection: "column",
+//         };
+//       case "portrait-primary":
+//         return {
+//           position: "absolute",
+//           top: "2%",
+//           right: "20px",
+//           flexDirection: "row",
+//         };
+//       default:
+//         return {
+//           position: "absolute",
+//           right: "50%",
+//           transform: "translateX(-50%)",
+//           flexDirection: "row",
+//           bottom: "24px",
+//         };
+//     }
+//   }
 
-  switch (orientationLabel.value) {
-    case "landscape-primary":
-      return {
-        position: "absolute",
-        right: "2%",
-        bottom: "7%",
-        flexDirection: "column",
-      };
-    case "landscape-secondary":
-      return {
-        position: "absolute",
-        left: "2%",
-        bottom: "7%",
-        flexDirection: "column",
-      };
-    default:
-      return {
-        position: "absolute",
-        bottom: "10px",
-        right: "20px",
-      };
-  }
-});
+//   switch (orientationLabel.value) {
+//     case "landscape-primary":
+//       return {
+//         position: "absolute",
+//         right: "2%",
+//         bottom: "7%",
+//         flexDirection: "column",
+//       };
+//     case "landscape-secondary":
+//       return {
+//         position: "absolute",
+//         left: "2%",
+//         bottom: "7%",
+//         flexDirection: "column",
+//       };
+//     default:
+//       return {
+//         position: "absolute",
+//         bottom: "10px",
+//         right: "20px",
+//         flexDirection: "row",
+//       };
+//   }
+// });
 
 const capturedImageStyle = computed<CSSProperties>(() => {
   switch (orientationLabel.value) {
@@ -206,10 +207,11 @@ const capturedImageStyle = computed<CSSProperties>(() => {
       v-if="focusPoint && cameraStore.overlayMode === 'capture'"
       class="absolute z-30 border-2 border-green-success rounded-sm pointer-events-none transition-opacity duration-300"
       :style="{
-        top: `${focusPoint.y - 25}px`,
-        left: `${focusPoint.x - 25}px`,
-        width: '55%',
-        height: '180px',
+        top: `${focusPoint.y}px`,
+        left: `${focusPoint.x}px`,
+        width: '80%',
+        height: '80%',
+        transform: 'translate(-50%, -50%)',
       }"
     />
 
@@ -225,7 +227,12 @@ const capturedImageStyle = computed<CSSProperties>(() => {
       <CameraOverlay :on-capture="capturePhoto" />
 
       <div class="absolute inset-0 z-10 pointer-events-none">
-        <StepIndicator :style="indicatorStyle" />
+        <StepIndicator />
+        <FocusTimer
+          v-if="focusPoint && cameraStore.overlayMode === 'capture'"
+          :focusTimer="focusTimer"
+        />
+
         <div
           v-if="cameraStore.capturedImage"
           :style="capturedImageStyle"
