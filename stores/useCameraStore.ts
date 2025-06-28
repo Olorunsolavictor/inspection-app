@@ -32,7 +32,6 @@ export const useCameraStore = defineStore("camera", () => {
   const currentStepIndex = ref(0);
   const completedSteps = ref<Record<Step, string>>({} as Record<Step, string>);
 
-  // Computed
   const currentStep = computed(() => steps.value[currentStepIndex.value]);
 
   const isInspectionComplete = computed(() => {

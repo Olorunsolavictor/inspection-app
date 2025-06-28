@@ -96,68 +96,6 @@ function handleGoBack() {
   router.push("/");
 }
 
-// const indicatorStyle = computed<CSSProperties>(() => {
-//   const isCaptureMode = cameraStore.overlayMode === "capture";
-
-//   if (isCaptureMode) {
-//     switch (orientationLabel.value) {
-//       case "landscape-primary":
-//         return {
-//           position: "absolute",
-//           bottom: "10%",
-//           left: "2%",
-//           flexDirection: "column",
-//         };
-//       case "landscape-secondary":
-//         return {
-//           position: "absolute",
-//           bottom: "10%",
-//           right: "20px",
-//           flexDirection: "column",
-//         };
-//       case "portrait-primary":
-//         return {
-//           position: "absolute",
-//           top: "2%",
-//           right: "20px",
-//           flexDirection: "row",
-//         };
-//       default:
-//         return {
-//           position: "absolute",
-//           right: "50%",
-//           transform: "translateX(-50%)",
-//           flexDirection: "row",
-//           bottom: "24px",
-//         };
-//     }
-//   }
-
-//   switch (orientationLabel.value) {
-//     case "landscape-primary":
-//       return {
-//         position: "absolute",
-//         right: "2%",
-//         bottom: "7%",
-//         flexDirection: "column",
-//       };
-//     case "landscape-secondary":
-//       return {
-//         position: "absolute",
-//         left: "2%",
-//         bottom: "7%",
-//         flexDirection: "column",
-//       };
-//     default:
-//       return {
-//         position: "absolute",
-//         bottom: "10px",
-//         right: "20px",
-//         flexDirection: "row",
-//       };
-//   }
-// });
-
 const capturedImageStyle = computed<CSSProperties>(() => {
   switch (orientationLabel.value) {
     case "landscape-primary":
