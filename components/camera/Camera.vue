@@ -108,7 +108,7 @@ const indicatorStyle = computed<CSSProperties>(() => {
       case "landscape-secondary":
         return {
           position: "absolute",
-          top: "10%",
+          bottom: "10%",
           right: "20px",
           flexDirection: "column",
         };
